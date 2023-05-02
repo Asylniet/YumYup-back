@@ -41,12 +41,12 @@ class ProductDetailAPIView(APIView):
         product.name = new_product_name
         product.expires_in = new_product_date
         product.save()
-        serializer = ProductSerializer(product, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data)
 
     def delete(self, request, product_id):
         instance = self.get_object(product_id)
         instance.delete()
-        return Response({'deleted': True})
+        return JsonResponse({'deleted': True})
 
 # Create your views here.
