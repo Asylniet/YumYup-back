@@ -4,7 +4,7 @@ from .models import *
 
 class PostSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    receipt_id = serializers.PrimaryKeyRelatedField(queryset=Ingredient_list.objects.all())
+    receipt_id = serializers.PrimaryKeyRelatedField(queryset=Receipt.objects.all())
     date = serializers.DateField(read_only=True)
     author_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 

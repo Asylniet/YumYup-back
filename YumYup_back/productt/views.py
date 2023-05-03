@@ -1,10 +1,13 @@
 import json
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework.views import APIView
 from productt.models import Product
 from rest_framework import status
 from django.http.response import JsonResponse
 from rest_framework.response import Response
 from productt.serializers import ProductSerializer
+from rest_framework.decorators import api_view
 
 
 class ProductAPIView(APIView):
@@ -48,5 +51,16 @@ class ProductDetailAPIView(APIView):
         instance = self.get_object(product_id)
         instance.delete()
         return JsonResponse({'deleted': True})
+
+
+@api_view(['GET'])
+def get_expiring_products(request):
+    if request.method == 'GET':
+        today = timezone.now().date()
+        expiration_date = today + timedelta(days=3)
+        products = Product.objects.filter(expires_in__lte=expiration_date)
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
 
 # Create your views here.
